@@ -33,7 +33,7 @@ INSERT INTO estados (IBGE, Estado, UF, Regiao) VALUES
 
 
 
-INSERT INTO estados (UF_Mun, IBGE, IBGE7, UF, Município, RegiAo) VALUES 
+INSERT INTO municipios (UF_Mun, IBGE, IBGE7, UF, Municipio, RegiAo) VALUES 
 ('ROAlta Floresta Doeste', 110001, 1100015, 'RO', 'Alta Floresta Doeste','N'),
 ('ROAriquemes', 110002, 1100023, 'RO', 'Ariquemes','N'),
 ('ROCabixi', 110003, 1100031, 'RO', 'Cabixi','N'),
