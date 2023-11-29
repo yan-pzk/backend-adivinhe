@@ -25,7 +25,7 @@ INSERT INTO estados (IBGE, Estado, UF, Regiao) VALUES
 (50, 'Mato Grosso do Sul', 'MS', 'CO'),
 (51, 'Mato Grosso', 'MT', 'CO'),
 (52, 'Goiás', 'GO', 'CO'),
-(53, 'Distrito Federal', 'DF', 'CO')
+(53, 'Distrito Federal', 'DF', 'CO');
 
 
 
