@@ -31,15 +31,15 @@ public class Municipios extends PanacheEntityBase {
     public String uf;
 
     @NotNull
-    public String município;    
+    public String municipio;    
     
     @NotNull
     public String regiao;    
     
     
     @ManyToOne
-    @JoinColumn(name = "uf", referencedColumnName = "uf")
-    @JsonbTransient
+    @JoinColumn(name = "uf", referencedColumnName = "uf", insertable=false, updatable=false)
+    @JsonbTransient 
     public Estados estados;
     
 }

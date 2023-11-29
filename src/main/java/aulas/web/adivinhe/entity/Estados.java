@@ -30,7 +30,7 @@ public class Estados extends PanacheEntityBase {
     
     
     @OneToMany
-    @JoinColumn(name = "uf", referencedColumnName = "uf")
+    @JoinColumn(name = "uf", referencedColumnName = "uf", insertable=false, updatable=false)
     @JsonbTransient
     public List<Municipios> municipios;
     

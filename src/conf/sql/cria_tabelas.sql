@@ -53,7 +53,7 @@ CREATE TABLE municipios (
     ibge7 INT  not null,
     uf_mun VARCHAR(255) not null,
     uf CHAR(2) not null,
-    municipio VARCHAR(255) not null,
+    município VARCHAR(255) not null,
     regiao VARCHAR(255)  not null,
     PRIMARY KEY (ibge7)
 );
@@ -67,8 +67,6 @@ CREATE TABLE estados (
     PRIMARY KEY (ibge)
 );
 
-ALTER TABLE estados
-ADD UNIQUE (uf);
 
 ALTER TABLE municipios
 ADD CONSTRAINT fk_estado_municipio FOREIGN KEY (uf) REFERENCES estados(uf);
