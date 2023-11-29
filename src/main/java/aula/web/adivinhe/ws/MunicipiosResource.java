@@ -28,11 +28,11 @@ public class MunicipiosResource {
     @APIResponse(responseCode = "403",
                  description = "Usuário não tem permissão para acessar dados do jogador.")
     @GET
-    @Path("/info/{codigo}")
+    @Path("/info/{ibge7}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "jogador"})
-    public Municipios infoMunicipios(Integer codigo) {
-        Municipios municipios = Municipios.findById(codigo);
+    public Municipios infoMunicipios(Integer ibge7) {
+        Municipios municipios = Municipios.findById(ibge7);
         verificaPermissao(municipios);
         return municipios;
     }

@@ -28,11 +28,11 @@ public class EstadosResource {
     @APIResponse(responseCode = "403",
                  description = "Usuário não tem permissão para acessar dados do jogador.")
     @GET
-    @Path("/info/{codigo}")
+    @Path("/info/{ibge}")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({"admin", "jogador"})
-    public Estados infoEstados(Integer codigo) {
-        Estados estados = Estados.findById(codigo);
+    public Estados infoEstados(Integer ibge) {
+        Estados estados = Estados.findById(ibge);
         verificaPermissao(estados);
         return estados;
     }
