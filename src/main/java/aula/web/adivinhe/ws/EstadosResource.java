@@ -30,10 +30,8 @@ public class EstadosResource {
     @GET
     @Path("/info/{ibge}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin", "jogador"})
     public Estados infoEstados(Integer ibge) {
         Estados estados = Estados.findById(ibge);
-        verificaPermissao(estados);
         return estados;
     }
     
