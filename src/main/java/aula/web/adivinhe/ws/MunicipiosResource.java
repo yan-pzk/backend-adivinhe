@@ -1,11 +1,14 @@
 package aula.web.adivinhe.ws;
 
 import aulas.web.adivinhe.entity.Municipios;
+import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.ws.rs.DefaultValue;
 import java.util.List;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.media.Content;
@@ -30,13 +33,10 @@ public class MunicipiosResource {
     @GET
     @Path("/info/{ibge7}")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin", "jogador"})
     public Municipios infoMunicipios(Integer ibge7) {
         Municipios municipios = Municipios.findById(ibge7);
-        verificaPermissao(municipios);
         return municipios;
     }
-    
     
     
     
@@ -50,16 +50,29 @@ public class MunicipiosResource {
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","jogador"})
     public List<Municipios> listMunicipios() {
         List<Municipios> municipios = Municipios.listAll();
         return municipios;
     }   
     
     
-    
-    private void verificaPermissao(Municipios municipio) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+
+    @Operation(summary = "Lista de todos os municipios de forma paginada",
+               description = "Retorna a lista de todos os municipios cadastrados de maneira paginada")
+    @APIResponse(responseCode = "200",
+                 description = "Sucesso na obtenção da lista de municipios paginada",
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Municipios[].class))
+                )
+    @GET
+    @Path("/list_paginated")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Municipios> listMunicipios(@QueryParam("page") @DefaultValue("0") int page,
+                                            @QueryParam("size") @DefaultValue("20") int size) {
+        PanacheQuery<Municipios> query = Municipios.findAll();
+        query.page(page, size);
+        List<Municipios> municipios = query.list();
+        return municipios;
     }
 }
 

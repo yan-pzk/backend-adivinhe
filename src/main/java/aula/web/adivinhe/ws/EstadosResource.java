@@ -37,7 +37,6 @@ public class EstadosResource {
     
     
     
-    
     @Operation(summary = "Lista de todos os estados",
                description = "Retorna a lista de todos os estados cadastrados")
     @APIResponse(responseCode = "200",
@@ -48,16 +47,9 @@ public class EstadosResource {
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({"admin","jogador"})
     public List<Estados> listEstados() {
         List<Estados> estados = Estados.listAll();
         return estados;
     }   
-    
-    
-    
-    private void verificaPermissao(Estados estados) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }
 
