@@ -7,6 +7,7 @@ import jakarta.ws.rs.DefaultValue;
 import java.util.List;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
@@ -74,5 +75,24 @@ public class MunicipiosResource {
         List<Municipios> municipios = query.list();
         return municipios;
     }
+    
+    
+    
+    @Operation(summary = "Lista de todos os municipios de um determinado estado",
+               description = "Retorna a lista de todos os municipios de um determinado estado")
+    @APIResponse(responseCode = "200",
+                 description = "Sucesso na obtenção da lista de municipios paginada",
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Municipios[].class))
+                )   
+    @GET
+    @Path("/por-estado/{uf}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Municipios> listMunicipiosByEstado(@PathParam("uf") String uf) {
+        return Municipios.list("uf", uf);
+    }
+    
+    
 }
+
 
