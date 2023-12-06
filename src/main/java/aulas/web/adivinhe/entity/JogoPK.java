@@ -1,10 +1,13 @@
 package aulas.web.adivinhe.entity;
 
+import jakarta.json.bind.annotation.JsonbDateFormat;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 
@@ -20,7 +23,9 @@ public class JogoPK implements Serializable {
     
     @NotNull
     @PastOrPresent
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "data_hora")
+    @JsonbDateFormat(Jogo.DATA_JOGO_PATTERN)
     public Date dataHora;
 
     public JogoPK() {

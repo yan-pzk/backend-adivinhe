@@ -43,30 +43,3 @@ insert into jogo values (3, '2021-11-17 20:25:22', 2);
 insert into jogo values (4, '2021-11-10 16:35:16', 6);
 insert into jogo values (4, '2021-11-12 23:15:35', 5);
 insert into jogo values (4, '2021-11-23 11:38:18', 7);
-
-
-
-
-
-CREATE TABLE municipios (
-    ibge INT not null,
-    ibge7 INT  not null,
-    uf_mun VARCHAR(255) not null,
-    uf CHAR(2) not null,
-    município VARCHAR(255) not null,
-    regiao VARCHAR(255)  not null,
-    PRIMARY KEY (ibge7)
-);
-
-
-CREATE TABLE estados (
-    ibge INT  not null,
-    estado VARCHAR(255)  not null,
-    uf CHAR(2)  not null,
-    regiao VARCHAR(255)  not null,
-    PRIMARY KEY (ibge)
-);
-
-
-ALTER TABLE municipios
-ADD CONSTRAINT fk_estado_municipio FOREIGN KEY (uf) REFERENCES estados(uf);

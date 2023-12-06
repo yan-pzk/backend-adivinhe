@@ -1,114 +1,75 @@
 package aula.web.adivinhe.ws;
 
 import aulas.web.adivinhe.entity.Jogador;
-import aulas.web.adivinhe.entity.Jogo;
-import jakarta.transaction.Transactional;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.DELETE;
+import jakarta.annotation.security.RolesAllowed;
 import java.util.List;
 import jakarta.ws.rs.GET;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 
 @Path("/jogador")
-public class JogadorResource {
-
+public class JogadorResource extends BaseResource {
+    
+    @Operation(summary = "Dados do jogador",
+               description = "Retorna os dados de um jogador cadastrado")
+    @APIResponse(responseCode = "200",
+                 description = "Jogador existe. Os dados são retornados.",
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Jogador.class))
+                )
+    @APIResponse(responseCode = "204",
+                 description = "O jogador não existe. Conteúdo vazio.")
+    @APIResponse(responseCode = "403",
+                 description = "Usuário não tem permissão para acessar dados do jogador.")
     @GET
     @Path("/info/{codigo}")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin", "jogador"})
     public Jogador infoJogador(Integer codigo) {
         Jogador jogador = Jogador.findById(codigo);
+        verificaPermissao(jogador);
+        return jogador;
+    }
+
+    @Operation(summary = "Dados do jogador",
+               description = "Retorna os dados de um jogador cadastrado")
+    @APIResponse(responseCode = "200",
+                 description = "Jogador existe. Os dados são retornados.",
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Jogador.class))
+                )
+    @APIResponse(responseCode = "204",
+                 description = "O jogador não existe. Conteúdo vazio.")
+    @APIResponse(responseCode = "403",
+                 description = "Usuário não tem permissão para acessar dados do jogador.")
+    @GET
+    @Path("/info/apelido/{apelido}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({"admin", "jogador"})
+    public Jogador infoJogador(String apelido) {
+        Jogador jogador = Jogador.find("apelido", apelido).singleResult();
+        verificaPermissao(jogador);
         return jogador;
     }
     
+    @Operation(summary = "Lista de todos os jogadores",
+               description = "Retorna a lista de todos os jogadores cadastrados")
+    @APIResponse(responseCode = "200",
+                 description = "Sucesso na obtenção da lista de jogadores",
+                 content = @Content(mediaType = MediaType.APPLICATION_JSON,
+                                    schema = @Schema(implementation = Jogador[].class))
+                )
     @GET
     @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
     public List<Jogador> listJogadores() {
         List<Jogador> jogadores = Jogador.listAll();
         return jogadores;
-    }
-
-    
-    @POST
-    @Path("/create")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response createJogador(Jogador jogador) {
-        // Antes de persistir, você deve verificar se o jogador com o mesmo código já existe para evitar duplicatas
-        if (Jogador.findById(jogador.codigo) != null) {
-            return Response.status(Response.Status.CONFLICT).entity("Jogador com código " + jogador.codigo + " já existe.").build();
-        }
-
-        // Você pode adicionar a lógica de validação ou hash da senha aqui
-
-        Jogador.persist(jogador);
-        if (jogador.isPersistent()) {
-            return Response.status(Response.Status.CREATED).entity(jogador).build();
-        } else {
-            return Response.status(Response.Status.BAD_REQUEST).build();
-        }
-    }
-    
-    
-    @PUT
-    @Path("/update/{codigo}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response updateJogador(@PathParam("codigo") Integer codigo, Jogador jogadorAtualizado) {
-        Jogador jogadorExistente = Jogador.findById(codigo);
-
-        if (jogadorExistente == null) {
-            // Jogador com o código fornecido não encontrado.
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        // Atualize os campos do jogador existente com os valores do jogador atualizado.
-        jogadorExistente.apelido = jogadorAtualizado.apelido;
-        jogadorExistente.nome = jogadorAtualizado.nome;
-        jogadorExistente.email = jogadorAtualizado.email;
-        // Não atualize a senha ou outros campos sensíveis diretamente sem validar ou hash-los adequadamente.
-        jogadorExistente.dataNasc = jogadorAtualizado.dataNasc;
-        jogadorExistente.endereco = jogadorAtualizado.endereco;
-
-        // Persiste as alterações no banco de dados.
-        jogadorExistente.persist();
-
-        return Response.ok(jogadorExistente).build();
-    }
-    
-    
-    
-    @DELETE
-    @Path("/delete/{codigo}")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Transactional
-    public Response deleteJogador(@PathParam("codigo") Integer codigo) {
-        Jogador jogador = Jogador.findById(codigo);
-        if (jogador == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-
-        // Primeiro, exclui todos os jogos associados ao jogador
-        jogador.jogos.forEach(jogo -> jogo.delete());
-
-        // Agora, exclui o próprio jogador
-        jogador.delete();
-
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
-    
-    
-    
-    
-    private void verificaPermissao(Jogador jogador) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

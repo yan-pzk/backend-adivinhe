@@ -18,6 +18,8 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "jogo")
 public class Jogo extends PanacheEntityBase {
+    
+    public static final String DATA_JOGO_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     @EmbeddedId
     @Valid
