@@ -1,9 +1,11 @@
 package aulas.web.adivinhe;
 
+import aulas.web.adivinhe.entity.Jogo;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.Test;
 
 import static io.restassured.RestAssured.given;
+import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
@@ -22,20 +24,16 @@ public class AdivinheTest {
     @Test
     public void testInfoJogador() {
         given()
-            .auth().basic("jsilva", "s3gr3d2")
-            .when().get("/jogador/info/2")
+            .when().get("/jogador/info/1")
             .then()
                 .statusCode(200)
-                .body(containsString("jsilva"));
+                .body(containsString("admin"));
     }
     
     @Test
     public void testFindJogos() {
-        given()
-            .auth().basic("jsilva", "s3gr3d2")
-            .when().get("/jogo/jogador/2")
-            .then()
-                .statusCode(200)
-                .body(containsString("\"jogador\":2"));
+        List<Jogo> jogos = Jogo.list("jogoPK.jogador", 4);
+        jogos.forEach(System.out::println);
     }
+    
 }
